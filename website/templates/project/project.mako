@@ -402,6 +402,37 @@
 
 <%def name="children()">
 % if ('write' in user['permissions'] and not node['is_registration']) or node['children']:
+    ## <div class="components panel panel-default">
+    ##     <div class="panel-heading clearfix">
+    ##         <h3 class="panel-title" style="padding-bottom: 5px; padding-top: 5px;">Components </h3>
+    ##         <div class="pull-right">
+    ##             % if 'write' in user['permissions'] and not node['is_registration']:
+    ##                 <span id="newComponent">
+    ##                     <button class="btn btn-sm btn-default" disabled="true">Add Component</button>
+    ##                 </span>
+    ##                 <a class="btn btn-sm btn-default" data-toggle="modal" data-target="#addPointer">Add Links</a>
+    ##             % endif
+    ##         </div>
+    ##     </div><!-- end addon-widget-header -->
+    ##     <div class="panel-body">
+    ##         % if node['children']:
+    ##             <div id="containment">
+    ##                 <div mod-meta='{
+    ##                     "tpl": "util/render_nodes.mako",
+    ##                     "uri": "${node["api_url"]}get_readable_descendants/",
+    ##                     "replace": true,
+    ##                     "kwargs": {
+    ##                       "sortable" : ${'true' if not node['is_registration'] else 'false'},
+    ##                       "pluralized_node_type": "components"
+    ##                     }
+    ##                   }'></div>
+    ##             </div><!-- end containment -->
+    ##         % else:
+    ##           <p>No components have been added to this ${node['node_type']}.</p>
+    ##         % endif
+    ##     </div><!-- end addon-widget-body -->
+    ## </div><!-- end components -->
+    ##
     <div class="components panel panel-default">
         <div class="panel-heading clearfix">
             <h3 class="panel-title" style="padding-bottom: 5px; padding-top: 5px;">Components </h3>
@@ -416,22 +447,15 @@
         </div><!-- end addon-widget-header -->
         <div class="panel-body">
             % if node['children']:
-                <div id="containment">
-                    <div mod-meta='{
-                        "tpl": "util/render_nodes.mako",
-                        "uri": "${node["api_url"]}get_readable_descendants/",
-                        "replace": true,
-                        "kwargs": {
-                          "sortable" : ${'true' if not node['is_registration'] else 'false'},
-                          "pluralized_node_type": "components"
-                        }
-                      }'></div>
-                </div><!-- end containment -->
+                <div id="nodeList"></div>
             % else:
               <p>No components have been added to this ${node['node_type']}.</p>
             % endif
         </div><!-- end addon-widget-body -->
     </div><!-- end components -->
+
+
+
 %endif
 
 </%def>

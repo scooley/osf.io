@@ -30,6 +30,57 @@ var node = window.contextVars.node;
 var nodeApiUrl = ctx.node.urls.api;
 var nodeCategories = ctx.nodeCategories || [];
 
+var HelloComponent = {
+    view: function(ctrl, params) {
+        var name = params.name || 'Kishore';
+        return m('div', 'Hello ' + name);
+    }
+};
+
+var HelloPanel = {
+    controller: function(params) {
+        var self = this;
+        self.data = m.prop();
+        self.summaries = [];
+        var url = $osf.apiV2Url('nodes/' + window.contextVars.node.id + '/children/',
+        {query:
+                {'embed':'contributors'}});
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/vnd.api+json;',
+            crossOrigin: true,
+            xhrFields: {withCredentials: true},
+            processData: false
+        }).done(function (response) {
+          self.data(response);
+          console.log(response);
+            // var contributors = response.data.map(function (contributor) {
+            //     // contrib ID has the form <nodeid>-<userid>
+            //     return contributor.id.split('-')[1];
+            // });
+            // self.contributors(contributors);
+        });
+    },
+    view: function(ctrl, params) {
+      //console.log('summaries...')
+        //console.log(ctrl.summaries);
+        debugger;
+        var links = ctrl.data() ? ctrl.data().data.map(function(each) {
+            return m('div', {className: 'project list-group-item list-group-item-node cite-container'},
+                            [
+                              m('a', each.attributes.title),
+                              m('br'),
+                              m('div', each.embeds.contributors.data[0].embeds.users.data.attributes.family_name)
+                            ]);
+        }) : [];
+        return m('div', {}, links);
+    }
+};
+
+m.mount(document.getElementById('nodeList'), HelloPanel);
+
 
 // Listen for the nodeLoad event (prevents multiple requests for data)
 $('body').on('nodeLoad', function(event, data) {

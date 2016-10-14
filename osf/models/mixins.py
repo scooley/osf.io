@@ -177,7 +177,7 @@ class AddonModelMixin(models.Model):
                 addon.undelete(save=True)
                 return addon
 
-        config = apps.get_app_config(name)
+        config = apps.get_app_config('addons_{}'.format(name))
         model = self._settings_model(name, config=config)
         ret = model(owner=self)
         ret.on_add()
